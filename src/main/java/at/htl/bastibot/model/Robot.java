@@ -133,28 +133,4 @@ public class Robot {
 
     }
 
-    public void rotateLeft() {
-
-        switch (getDirection()) {
-
-            case NORTH:
-                setDirection(Direction.WEST);
-                break;
-
-            case EAST:
-                setDirection(Direction.NORTH);
-                break;
-
-            case SOUTH:
-                setDirection(Direction.EAST);
-                break;
-
-            case WEST:
-                setDirection(Direction.SOUTH);
-                break;
-
-        }
-
-    }
-
 }
