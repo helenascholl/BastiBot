@@ -4,6 +4,7 @@
 
 package at.htl.bastibot.gui;
 
+import at.htl.bastibot.model.Direction;
 import at.htl.bastibot.model.Robot;
 import processing.core.PApplet;
 
@@ -38,8 +39,11 @@ public class Main extends PApplet {
     private int fieldHeight;
     private boolean fieldsAreSqares = true;
 
-    private char keyRotateLeft = 'f';
-    private char keyStepForward = 'l';
+    private boolean useArrowKeys = false;
+    private final char keyUp = 'w';
+    private final char keyRight = 'd';
+    private final char keyDown = 's';
+    private final char keyLeft = 'a';
 
     private int score;
     private int highscore = 0;
@@ -147,7 +151,7 @@ public class Main extends PApplet {
 
     private void startScreen() {
 
-        String text = "Move a robot on a grid by pressing [" + (keyStepForward + "").toUpperCase() + "] to make a step in the selected direction and [" + (keyRotateLeft + "").toUpperCase() + "] to rotate left. The goal is to collect as many boxes as possible in 60 seconds.";
+        String text = "Move a robot on a grid. The goal is to collect as many boxes as possible in 60 seconds.";
 
         background(startScreenBackgroundColor);
 
@@ -256,19 +260,10 @@ public class Main extends PApplet {
         rect(0, 0, width, marginTopBottom);
 
         stroke(0);
-
-        String textStepForward = "Step forward [" + (keyStepForward + "").toUpperCase() + "]";
-        String textRotateLeft = "Rotate Left [" + (keyRotateLeft + "").toUpperCase() + "]";
         int y = marginTopBottom / 2;
 
         fill(textColor);
         textSize(Math.min(marginLeftRight, marginTopBottom) / 4);
-
-        textAlign(LEFT, BOTTOM);
-        text(textStepForward, marginLeftRight / 10, y);
-
-        textAlign(LEFT, TOP);
-        text(textRotateLeft, marginLeftRight / 10, y);
 
         textAlign(CENTER, BOTTOM);
         text("Exit [ESC]", width / 2, y);
@@ -367,12 +362,60 @@ public class Main extends PApplet {
 
     private void interpretPressedKey() {
 
-        if (keyRotateLeft == (key + "").toLowerCase().charAt(0) && keyPressed) {
-            robot.rotateLeft();
-        } else if (keyStepForward == (key + "").toLowerCase().charAt(0) && keyPressed) {
-            robot.stepForward();
+        if (keyPressed) {
+
+            if (useArrowKeys) {
+
+                switch (keyCode) {
+
+                    case UP:
+                        robot.setDirection(Direction.NORTH);
+                        break;
+
+                    case RIGHT:
+                        robot.setDirection(Direction.EAST);
+                        break;
+
+                    case DOWN:
+                        robot.setDirection(Direction.SOUTH);
+                        break;
+
+                    case LEFT:
+                        robot.setDirection(Direction.WEST);
+                        break;
+
+                }
+
+            } else {
+
+                char currentKey = (key + "").toLowerCase().charAt(0);
+
+                switch (currentKey) {
+
+                    case keyUp:
+                        robot.setDirection(Direction.NORTH);
+                         break;
+
+                    case keyRight:
+                        robot.setDirection(Direction.EAST);
+                        break;
+
+                    case keyDown:
+                        robot.setDirection(Direction.SOUTH);
+                        break;
+
+                    case keyLeft:
+                        robot.setDirection(Direction.WEST);
+                        break;
+
+                }
+
+            }
+
         }
 
+        robot.stepForward();
+        keyCode = SHIFT;
         key = '§';
 
     }
